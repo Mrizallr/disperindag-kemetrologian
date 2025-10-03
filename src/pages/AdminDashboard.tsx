@@ -21,6 +21,10 @@ import {
   Activity,
   PieChart,
   BarChart3,
+  Clock,
+  RefreshCw,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import {
@@ -62,7 +66,8 @@ const AdminDashboard: React.FC = () => {
     jenisLapak: [{ name: "Kios", jumlah: 0 }, { name: "Los", jumlah: 0 }, { name: "PKL", jumlah: 0 }],
     trendBulanan: [],
     aktivitasMingguan: [],
-    dataTeraStats: { spbu: 0, pasar: 0, umum: 0 }
+    dataTeraStats: { spbu: 0, pasar: 0, umum: 0 },
+    permohonanStats: { pending: 0, processing: 0, approved: 0, rejected: 0 }
   });
 
   useEffect(() => {
@@ -292,6 +297,18 @@ const AdminDashboard: React.FC = () => {
         const spbuCount = Math.round(totalPengawasan * 0.6); // 60% SPBU dari pengawasan BBM
         const realPasarCount = pasarCount.count || 0; // Data real tera pasar
 
+        // 4. Fetch data permohonan tera
+        const { data: permohonanData } = await supabase
+          .from('pengajuan_tera')
+          .select('status');
+        
+        const permohonanCount = {
+          pending: permohonanData?.filter(p => p.status === 'Pending').length || 0,
+          processing: permohonanData?.filter(p => p.status === 'Processing').length || 0,
+          approved: permohonanData?.filter(p => p.status === 'Approved').length || 0,
+          rejected: permohonanData?.filter(p => p.status === 'Rejected').length || 0
+        };
+
         // Update chart data
         setChartData({
           statusTera: [
@@ -310,7 +327,8 @@ const AdminDashboard: React.FC = () => {
             spbu: spbuCount,
             pasar: realPasarCount,
             umum: umumCount.count || 0
-          }
+          },
+          permohonanStats: permohonanCount
         });
         
       } catch (error) {
@@ -597,43 +615,64 @@ const AdminDashboard: React.FC = () => {
             </CardContent>
           </Card>
 
-          {/* Aktivitas Mingguan */}
+          {/* Statistik Permohonan Tera */}
           <Card className="border-0 shadow-lg bg-white dark:bg-slate-800 dark:border dark:border-slate-700/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-3 text-slate-900 dark:text-slate-100">
                 <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center">
-                  <Activity className="w-4 h-4 text-white" />
+                  <FileText className="w-4 h-4 text-white" />
                 </div>
-                Aktivitas Mingguan
+                Statistik Permohonan Tera
               </CardTitle>
               <CardDescription className="text-slate-600 dark:text-slate-400">
-                Jumlah aktivitas tera dan pengawasan per hari dalam seminggu
+                Status permohonan tera yang masuk dari masyarakat
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={chartData.aktivitasMingguan}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="hari" type="category" />
-                  <YAxis type="number" />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="tera"
-                    stroke="#3b82f6"
-                    strokeWidth={3}
-                    name="Tera"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="pengawasan"
-                    stroke="#10b981"
-                    strokeWidth={3}
-                    name="Pengawasan"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="flex items-center gap-3 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                  <div className="w-8 h-8 bg-orange-100 dark:bg-orange-800 rounded-full flex items-center justify-center">
+                    <Clock className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-orange-600 dark:text-orange-400">{chartData.permohonanStats.pending}</div>
+                    <div className="text-xs text-orange-700 dark:text-orange-300">Menunggu</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                  <div className="w-8 h-8 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
+                    <RefreshCw className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{chartData.permohonanStats.processing}</div>
+                    <div className="text-xs text-blue-700 dark:text-blue-300">Diproses</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <div className="w-8 h-8 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400" />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-green-600 dark:text-green-400">{chartData.permohonanStats.approved}</div>
+                    <div className="text-xs text-green-700 dark:text-green-300">Disetujui</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                  <div className="w-8 h-8 bg-red-100 dark:bg-red-800 rounded-full flex items-center justify-center">
+                    <XCircle className="w-4 h-4 text-red-600 dark:text-red-400" />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-red-600 dark:text-red-400">{chartData.permohonanStats.rejected}</div>
+                    <div className="text-xs text-red-700 dark:text-red-300">Ditolak</div>
+                  </div>
+                </div>
+              </div>
+              <Button variant="outline" className="w-full" asChild>
+                <Link to="/admin/data-permohonan">
+                  <Eye className="w-4 h-4 mr-2" />
+                  Lihat Semua Permohonan
+                </Link>
+              </Button>
             </CardContent>
           </Card>
         </div>

@@ -1,91 +1,44 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import AdminLayout from "../components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  FileText,
-  Search,
-  Filter,
-  Eye,
-  CheckCircle,
-  XCircle,
-  Clock,
-  RefreshCw,
-  ChevronLeft,
-  ChevronRight,
-  Calendar,
-  User,
-  MapPin,
-  Phone,
-  Mail,
-} from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { FileText, Search, Eye, RefreshCw, Download, ExternalLink, Edit, CheckCircle, XCircle, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../lib/supabase";
 
-interface Permohonan {
+interface PengajuanTera {
   id: number;
-  nama_pemohon: string;
-  email: string;
-  telepon: string;
-  alamat: string;
-  jenis_permohonan: string;
-  jenis_alat: string;
-  merek_alat: string;
-  kapasitas: string;
-  tahun_pembuatan: string;
+  nama_perusahaan: string;
+  alamat_perusahaan?: string;
+  alamat_uttp: string;
+  kecamatan?: string;
+  no_contact?: string;
+  jenis_uttp: string;
+  nomor_spbu?: string;
+  jumlah_pompa?: number;
+  jumlah_nozzle?: number;
+  nomor_surat?: string;
+  tanggal_surat?: string;
+  file_surat_url?: string;
   status: string;
-  tanggal_permohonan: string;
-  tanggal_diproses: string | null;
-  catatan_admin: string | null;
-  dokumen_pendukung: string | null;
   created_at: string;
 }
 
 const DataPermohonan: React.FC = () => {
-  const [permohonan, setPermohonan] = useState<Permohonan[]>([]);
+  const [permohonan, setPermohonan] = useState<PengajuanTera[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState<string>("all");
-  const [filterJenis, setFilterJenis] = useState<string>("all");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
-  const [selectedPermohonan, setSelectedPermohonan] = useState<Permohonan | null>(null);
+  const [selectedPermohonan, setSelectedPermohonan] = useState<PengajuanTera | null>(null);
   const [showDetailDialog, setShowDetailDialog] = useState(false);
-  const [showProcessDialog, setShowProcessDialog] = useState(false);
-  const [processing, setProcessing] = useState(false);
-  const [processStatus, setProcessStatus] = useState<string>("");
-  const [adminNotes, setAdminNotes] = useState("");
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
+  const [newStatus, setNewStatus] = useState("");
+  const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
     loadPermohonan();
@@ -95,7 +48,7 @@ const DataPermohonan: React.FC = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from("permohonan")
+        .from("pengajuan_tera")
         .select("*")
         .order("created_at", { ascending: false });
 
@@ -109,101 +62,64 @@ const DataPermohonan: React.FC = () => {
     }
   };
 
-  const processApplication = async () => {
-    if (!selectedPermohonan || !processStatus) return;
+  const updateStatus = async () => {
+    if (!selectedPermohonan || !newStatus) return;
 
-    setProcessing(true);
+    setUpdating(true);
     try {
       const { error } = await supabase
-        .from("permohonan")
-        .update({
-          status: processStatus,
-          tanggal_diproses: new Date().toISOString(),
-          catatan_admin: adminNotes,
-        })
+        .from("pengajuan_tera")
+        .update({ status: newStatus })
         .eq("id", selectedPermohonan.id);
 
       if (error) throw error;
 
-      toast.success("Permohonan berhasil diproses");
-      setShowProcessDialog(false);
-      setProcessStatus("");
-      setAdminNotes("");
+      toast.success(`Status berhasil diubah ke ${newStatus}`);
+      setShowUpdateDialog(false);
+      setNewStatus("");
       loadPermohonan();
     } catch (error) {
-      console.error("Error processing application:", error);
-      toast.error("Gagal memproses permohonan");
+      console.error("Error updating status:", error);
+      toast.error("Gagal mengubah status");
     } finally {
-      setProcessing(false);
+      setUpdating(false);
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "pending":
-        return <Badge variant="secondary">Menunggu</Badge>;
-      case "approved":
-        return <Badge variant="default">Disetujui</Badge>;
-      case "rejected":
-        return <Badge variant="destructive">Ditolak</Badge>;
-      case "processing":
-        return <Badge variant="outline">Diproses</Badge>;
+      case "Pending":
+        return <Badge variant="secondary"><Clock className="w-3 h-3 mr-1" />Menunggu</Badge>;
+      case "Processing":
+        return <Badge variant="outline"><RefreshCw className="w-3 h-3 mr-1" />Diproses</Badge>;
+      case "Approved":
+        return <Badge variant="default"><CheckCircle className="w-3 h-3 mr-1" />Disetujui</Badge>;
+      case "Rejected":
+        return <Badge variant="destructive"><XCircle className="w-3 h-3 mr-1" />Ditolak</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "pending":
-        return <Clock className="w-4 h-4 text-orange-500" />;
-      case "approved":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "rejected":
-        return <XCircle className="w-4 h-4 text-red-500" />;
-      case "processing":
-        return <RefreshCw className="w-4 h-4 text-blue-500" />;
-      default:
-        return <Clock className="w-4 h-4 text-gray-500" />;
+  const getFileUrl = (filePath: string) => {
+    if (!filePath) return null;
+    try {
+      const { data } = supabase.storage.from('uploads').getPublicUrl(filePath);
+      return data.publicUrl;
+    } catch (error) {
+      console.error('Error getting file URL:', error);
+      return null;
     }
   };
 
-  // Filter and search logic
-  const filteredPermohonan = useMemo(() => {
-    return permohonan.filter((item) => {
-      const matchesSearch =
-        item.nama_pemohon.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.jenis_alat.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.merek_alat.toLowerCase().includes(searchTerm.toLowerCase());
-
-      const matchesStatus = filterStatus === "all" || item.status === filterStatus;
-      const matchesJenis = filterJenis === "all" || item.jenis_permohonan === filterJenis;
-
-      return matchesSearch && matchesStatus && matchesJenis;
-    });
-  }, [permohonan, searchTerm, filterStatus, filterJenis]);
-
-  // Pagination logic
-  const totalPages = Math.ceil(filteredPermohonan.length / itemsPerPage);
-  const paginatedPermohonan = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredPermohonan.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredPermohonan, currentPage, itemsPerPage]);
+  const filteredPermohonan = permohonan.filter((item) =>
+    item.nama_perusahaan?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.jenis_uttp?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.kecamatan?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("id-ID", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
-  const stats = {
-    total: permohonan.length,
-    pending: permohonan.filter((p) => p.status === "pending").length,
-    approved: permohonan.filter((p) => p.status === "approved").length,
-    rejected: permohonan.filter((p) => p.status === "rejected").length,
+    return new Date(dateString).toLocaleDateString("id-ID");
   };
 
   if (loading) {
@@ -219,16 +135,13 @@ const DataPermohonan: React.FC = () => {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Page Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
               <FileText className="w-8 h-8 text-blue-600" />
-              Data Permohonan
+              Data Permohonan Tera
             </h1>
-            <p className="text-gray-600 mt-1">
-              Kelola permohonan tera dan tera ulang dari masyarakat
-            </p>
+            <p className="text-gray-600 mt-1">Kelola permohonan tera dari masyarakat</p>
           </div>
           <Button onClick={loadPermohonan} variant="outline">
             <RefreshCw className="w-4 h-4 mr-2" />
@@ -240,279 +153,233 @@ const DataPermohonan: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card className="border-0 shadow-sm">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
-              <p className="text-sm text-gray-600">Total Permohonan</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-orange-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-orange-600">
+                    {permohonan.filter(p => p.status === 'Pending').length}
+                  </div>
+                  <p className="text-sm text-gray-600">Menunggu</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
+          
           <Card className="border-0 shadow-sm">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-orange-600">{stats.pending}</div>
-              <p className="text-sm text-gray-600">Menunggu</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <RefreshCw className="w-5 h-5 text-blue-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-blue-600">
+                    {permohonan.filter(p => p.status === 'Processing').length}
+                  </div>
+                  <p className="text-sm text-gray-600">Diproses</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
+          
           <Card className="border-0 shadow-sm">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-green-600">{stats.approved}</div>
-              <p className="text-sm text-gray-600">Disetujui</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-green-600">
+                    {permohonan.filter(p => p.status === 'Approved').length}
+                  </div>
+                  <p className="text-sm text-gray-600">Disetujui</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
+          
           <Card className="border-0 shadow-sm">
             <CardContent className="p-4">
-              <div className="text-2xl font-bold text-red-600">{stats.rejected}</div>
-              <p className="text-sm text-gray-600">Ditolak</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                  <XCircle className="w-5 h-5 text-red-600" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-red-600">
+                    {permohonan.filter(p => p.status === 'Rejected').length}
+                  </div>
+                  <p className="text-sm text-gray-600">Ditolak</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Search and Filter Controls */}
-        <Card className="border-0 shadow-sm">
-          <CardContent className="p-4">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <Input
-                    placeholder="Cari nama pemohon, email, atau jenis alat..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Select value={filterStatus} onValueChange={setFilterStatus}>
-                  <SelectTrigger className="w-[150px]">
-                    <Filter className="w-4 h-4 mr-2" />
-                    <SelectValue placeholder="Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Semua Status</SelectItem>
-                    <SelectItem value="pending">Menunggu</SelectItem>
-                    <SelectItem value="processing">Diproses</SelectItem>
-                    <SelectItem value="approved">Disetujui</SelectItem>
-                    <SelectItem value="rejected">Ditolak</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={filterJenis} onValueChange={setFilterJenis}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Jenis Permohonan" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Semua Jenis</SelectItem>
-                    <SelectItem value="tera_baru">Tera Baru</SelectItem>
-                    <SelectItem value="tera_ulang">Tera Ulang</SelectItem>
-                  </SelectContent>
-                </Select>
+        <Card>
+          <CardHeader>
+            <CardTitle>Daftar Permohonan ({filteredPermohonan.length})</CardTitle>
+            <div className="flex gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Input
+                  placeholder="Cari nama perusahaan atau jenis UTTP..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Applications Table */}
-        <Card className="border-0 shadow-md">
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span>Daftar Permohonan</span>
-              <Badge variant="outline">
-                {filteredPermohonan.length} dari {permohonan.length}
-              </Badge>
-            </CardTitle>
           </CardHeader>
           <CardContent>
             {filteredPermohonan.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FileText className="w-10 h-10 text-gray-400" />
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {searchTerm || filterStatus !== "all" || filterJenis !== "all"
-                    ? "Tidak ada hasil"
-                    : "Tidak ada permohonan"}
-                </h3>
-                <p className="text-gray-500">
-                  {searchTerm || filterStatus !== "all" || filterJenis !== "all"
-                    ? "Coba ubah filter atau kata kunci pencarian"
-                    : "Permohonan baru akan muncul di sini"}
-                </p>
+              <div className="text-center py-8">
+                <p className="text-gray-500">Tidak ada data permohonan</p>
               </div>
             ) : (
-              <>
-                <div className="rounded-md border">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Pemohon</TableHead>
-                        <TableHead>Jenis</TableHead>
-                        <TableHead>Alat</TableHead>
-                        <TableHead>Tanggal</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Aksi</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {paginatedPermohonan.map((item) => (
-                        <TableRow key={item.id}>
-                          <TableCell>
-                            <div>
-                              <div className="font-medium">{item.nama_pemohon}</div>
-                              <div className="text-sm text-gray-500">{item.email}</div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="outline">
-                              {item.jenis_permohonan === "tera_baru" ? "Tera Baru" : "Tera Ulang"}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <div>
-                              <div className="font-medium">{item.jenis_alat}</div>
-                              <div className="text-sm text-gray-500">{item.merek_alat}</div>
-                            </div>
-                          </TableCell>
-                          <TableCell>{formatDate(item.tanggal_permohonan)}</TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              {getStatusIcon(item.status)}
-                              {getStatusBadge(item.status)}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => {
-                                  setSelectedPermohonan(item);
-                                  setShowDetailDialog(true);
-                                }}
-                              >
-                                <Eye className="w-4 h-4 mr-1" />
-                                Detail
-                              </Button>
-                              {item.status === "pending" && (
-                                <Button
-                                  size="sm"
-                                  onClick={() => {
-                                    setSelectedPermohonan(item);
-                                    setShowProcessDialog(true);
-                                  }}
-                                >
-                                  Proses
-                                </Button>
-                              )}
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-between pt-6 border-t">
-                    <div className="text-sm text-gray-600">
-                      Menampilkan {((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, filteredPermohonan.length)} dari {filteredPermohonan.length} permohonan
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                        disabled={currentPage === 1}
-                      >
-                        <ChevronLeft className="w-4 h-4" />
-                        Sebelumnya
-                      </Button>
-                      <div className="flex items-center gap-1">
-                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                          const pageNum = i + 1;
-                          return (
-                            <Button
-                              key={pageNum}
-                              variant={currentPage === pageNum ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => setCurrentPage(pageNum)}
-                              className="w-8 h-8 p-0"
-                            >
-                              {pageNum}
-                            </Button>
-                          );
-                        })}
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                        disabled={currentPage === totalPages}
-                      >
-                        Selanjutnya
-                        <ChevronRight className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Perusahaan</TableHead>
+                    <TableHead>Jenis UTTP</TableHead>
+                    <TableHead>Lokasi</TableHead>
+                    <TableHead>Tanggal</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Aksi</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredPermohonan.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>
+                        <div>
+                          <div className="font-medium">{item.nama_perusahaan}</div>
+                          <div className="text-sm text-gray-500">{item.no_contact || 'N/A'}</div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{item.jenis_uttp}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div>
+                          <div className="font-medium">{item.kecamatan || 'N/A'}</div>
+                          <div className="text-sm text-gray-500">{item.nomor_spbu || 'N/A'}</div>
+                        </div>
+                      </TableCell>
+                      <TableCell>{formatDate(item.created_at)}</TableCell>
+                      <TableCell>
+                        {getStatusBadge(item.status)}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setSelectedPermohonan(item);
+                              setShowDetailDialog(true);
+                            }}
+                          >
+                            <Eye className="w-4 h-4 mr-1" />
+                            Detail
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="default"
+                            onClick={() => {
+                              setSelectedPermohonan(item);
+                              setNewStatus(item.status);
+                              setShowUpdateDialog(true);
+                            }}
+                          >
+                            <Edit className="w-4 h-4 mr-1" />
+                            Status
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             )}
           </CardContent>
         </Card>
 
         {/* Detail Dialog */}
         <Dialog open={showDetailDialog} onOpenChange={setShowDetailDialog}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>Detail Permohonan</DialogTitle>
             </DialogHeader>
             {selectedPermohonan && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="font-semibold mb-2 flex items-center gap-2">
-                        <User className="w-4 h-4" />
-                        Data Pemohon
-                      </h4>
-                      <div className="space-y-2 text-sm">
-                        <p><strong>Nama:</strong> {selectedPermohonan.nama_pemohon}</p>
-                        <p><strong>Email:</strong> {selectedPermohonan.email}</p>
-                        <p><strong>Telepon:</strong> {selectedPermohonan.telepon}</p>
-                        <p><strong>Alamat:</strong> {selectedPermohonan.alamat}</p>
-                      </div>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Data Perusahaan</h4>
+                    <div className="space-y-1 text-sm">
+                      <p><strong>Nama:</strong> {selectedPermohonan.nama_perusahaan}</p>
+                      <p><strong>Contact:</strong> {selectedPermohonan.no_contact || 'N/A'}</p>
+                      <p><strong>Alamat:</strong> {selectedPermohonan.alamat_perusahaan || 'N/A'}</p>
+                      <p><strong>Alamat UTTP:</strong> {selectedPermohonan.alamat_uttp}</p>
+                      <p><strong>Kecamatan:</strong> {selectedPermohonan.kecamatan || 'N/A'}</p>
                     </div>
                   </div>
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="font-semibold mb-2 flex items-center gap-2">
-                        <FileText className="w-4 h-4" />
-                        Data Alat
-                      </h4>
-                      <div className="space-y-2 text-sm">
-                        <p><strong>Jenis Alat:</strong> {selectedPermohonan.jenis_alat}</p>
-                        <p><strong>Merek:</strong> {selectedPermohonan.merek_alat}</p>
-                        <p><strong>Kapasitas:</strong> {selectedPermohonan.kapasitas}</p>
-                        <p><strong>Tahun Pembuatan:</strong> {selectedPermohonan.tahun_pembuatan}</p>
-                      </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Data UTTP</h4>
+                    <div className="space-y-1 text-sm">
+                      <p><strong>Jenis:</strong> {selectedPermohonan.jenis_uttp}</p>
+                      <p><strong>SPBU:</strong> {selectedPermohonan.nomor_spbu || 'N/A'}</p>
+                      <p><strong>Pompa:</strong> {selectedPermohonan.jumlah_pompa || 0}</p>
+                      <p><strong>Nozzle:</strong> {selectedPermohonan.jumlah_nozzle || 0}</p>
+                      <p><strong>Status:</strong> {selectedPermohonan.status}</p>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold mb-2 flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    Status & Tanggal
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p><strong>Status:</strong> {getStatusBadge(selectedPermohonan.status)}</p>
-                      <p><strong>Tanggal Permohonan:</strong> {formatDate(selectedPermohonan.tanggal_permohonan)}</p>
-                    </div>
-                    <div>
-                      {selectedPermohonan.tanggal_diproses && (
-                        <p><strong>Tanggal Diproses:</strong> {formatDate(selectedPermohonan.tanggal_diproses)}</p>
-                      )}
-                      {selectedPermohonan.catatan_admin && (
-                        <p><strong>Catatan Admin:</strong> {selectedPermohonan.catatan_admin}</p>
-                      )}
-                    </div>
+                  <h4 className="font-semibold mb-2">Dokumen</h4>
+                  <div className="text-sm">
+                    <p><strong>Nomor Surat:</strong> {selectedPermohonan.nomor_surat || 'N/A'}</p>
+                    <p><strong>Tanggal Surat:</strong> {selectedPermohonan.tanggal_surat ? formatDate(selectedPermohonan.tanggal_surat) : 'N/A'}</p>
+                    {selectedPermohonan.file_surat_url && (
+                      <div>
+                        <p className="mb-2"><strong>File Surat:</strong></p>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              const url = selectedPermohonan.file_surat_url ? getFileUrl(selectedPermohonan.file_surat_url) : null;
+                              if (url) {
+                                window.open(url, '_blank');
+                              } else {
+                                toast.error('File tidak dapat diakses');
+                              }
+                            }}
+                          >
+                            <ExternalLink className="w-4 h-4 mr-1" />
+                            Lihat File
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              const url = selectedPermohonan.file_surat_url ? getFileUrl(selectedPermohonan.file_surat_url) : null;
+                              if (url) {
+                                const link = document.createElement('a');
+                                link.href = url;
+                                link.download = `surat_${selectedPermohonan.nama_perusahaan}.pdf`;
+                                link.click();
+                              } else {
+                                toast.error('File tidak dapat didownload');
+                              }
+                            }}
+                          >
+                            <Download className="w-4 h-4 mr-1" />
+                            Download
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -520,42 +387,41 @@ const DataPermohonan: React.FC = () => {
           </DialogContent>
         </Dialog>
 
-        {/* Process Dialog */}
-        <Dialog open={showProcessDialog} onOpenChange={setShowProcessDialog}>
+        {/* Update Status Dialog */}
+        <Dialog open={showUpdateDialog} onOpenChange={setShowUpdateDialog}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Proses Permohonan</DialogTitle>
+              <DialogTitle>Update Status Permohonan</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">Status</label>
-                <Select value={processStatus} onValueChange={setProcessStatus}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Pilih status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="processing">Diproses</SelectItem>
-                    <SelectItem value="approved">Disetujui</SelectItem>
-                    <SelectItem value="rejected">Ditolak</SelectItem>
-                  </SelectContent>
-                </Select>
+            {selectedPermohonan && (
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Permohonan dari: <strong>{selectedPermohonan.nama_perusahaan}</strong>
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Status Baru</label>
+                  <Select value={newStatus} onValueChange={setNewStatus}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Pending">Menunggu</SelectItem>
+                      <SelectItem value="Processing">Diproses</SelectItem>
+                      <SelectItem value="Approved">Disetujui</SelectItem>
+                      <SelectItem value="Rejected">Ditolak</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-              <div>
-                <label className="text-sm font-medium">Catatan Admin</label>
-                <Textarea
-                  value={adminNotes}
-                  onChange={(e) => setAdminNotes(e.target.value)}
-                  placeholder="Tambahkan catatan atau alasan..."
-                  rows={3}
-                />
-              </div>
-            </div>
+            )}
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowProcessDialog(false)}>
+              <Button variant="outline" onClick={() => setShowUpdateDialog(false)}>
                 Batal
               </Button>
-              <Button onClick={processApplication} disabled={processing || !processStatus}>
-                {processing ? "Memproses..." : "Proses"}
+              <Button onClick={updateStatus} disabled={updating || !newStatus}>
+                {updating ? "Mengupdate..." : "Update Status"}
               </Button>
             </DialogFooter>
           </DialogContent>

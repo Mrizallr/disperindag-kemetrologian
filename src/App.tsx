@@ -28,6 +28,9 @@ import DataPengawasanBBM from "./pages/DataPengawasanBBM";
 import TambahPengawasanBBM from "./pages/TambahPengawasanBBM";
 import ViewPengawasanBBM from "./pages/ViewPengawasanBBM";
 import EditPengawasanBBM from "./pages/EditPengawasanBBM";
+import FormPengajuanTera from "./pages/FormPengajuanTera";
+import DataPerpanjang from "./pages/DataPerpanjang";
+import FormTeraUlang from "./pages/FormTeraUlang";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "./components/theme-provider";
 
@@ -47,7 +50,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+  return isAuthenticated ? <div>{children}</div> : <Navigate to="/login" />;
 };
 
 function App() {
@@ -89,176 +92,185 @@ function App() {
     >
       <AuthContext.Provider value={{ isAuthenticated, logout }}>
         <Router>
-        <div className="min-h-screen bg-background text-foreground">
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/data-pelaku-usaha"
-              element={
-                <ProtectedRoute>
-                  <DataPelakuUsaha />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/tambah-data"
-              element={
-                <ProtectedRoute>
-                  <TambahData />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/edit-data/:id"
-              element={
-                <ProtectedRoute>
-                  <EditData />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/notifikasi"
-              element={
-                <ProtectedRoute>
-                  <NotifikasiPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/artikel"
-              element={
-                <ProtectedRoute>
-                  <ArtikelPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/tambah-artikel"
-              element={
-                <ProtectedRoute>
-                  <TambahArtikel />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/edit-artikel/:id"
-              element={
-                <ProtectedRoute>
-                  <EditArtikel />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/view-data/:id"
-              element={
-                <ProtectedRoute>
-                  <ViewData />
-                </ProtectedRoute>
-              }
-            />
+          <div className="min-h-screen bg-background text-foreground">
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/data-pelaku-usaha"
+                element={
+                  <ProtectedRoute>
+                    <DataPelakuUsaha />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/tambah-data"
+                element={
+                  <ProtectedRoute>
+                    <TambahData />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/edit-data/:id"
+                element={
+                  <ProtectedRoute>
+                    <EditData />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/notifikasi"
+                element={
+                  <ProtectedRoute>
+                    <NotifikasiPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/artikel"
+                element={
+                  <ProtectedRoute>
+                    <ArtikelPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/tambah-artikel"
+                element={
+                  <ProtectedRoute>
+                    <TambahArtikel />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/edit-artikel/:id"
+                element={
+                  <ProtectedRoute>
+                    <EditArtikel />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/view-data/:id"
+                element={
+                  <ProtectedRoute>
+                    <ViewData />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route
-              path="/admin/perpanjang"
-              element={
-                <ProtectedRoute>
-                  <ViewData />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/permohonan"
-              element={
-                <ProtectedRoute>
-                  <DataPermohonan />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/admin/perpanjang"
+                element={
+                  <ProtectedRoute>
+                    <DataPerpanjang />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/permohonan"
+                element={
+                  <ProtectedRoute>
+                    <DataPermohonan />
+                  </ProtectedRoute>
+                }
+              />
 
-            <Route
-              path="/admin/alat"
-              element={
-                <ProtectedRoute>
-                  <DaftarAlat />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/data-tera/spbu"
-              element={
-                <ProtectedRoute>
-                  <DataWajibTeraSPBU />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/data-tera/pasar"
-              element={
-                <ProtectedRoute>
-                  <DataWajibTeraPasar />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/data-tera/umum"
-              element={
-                <ProtectedRoute>
-                  <DataWajibTeraUmum />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/pengawasan-spu"
-              element={
-                <ProtectedRoute>
-                  <PengawasanSPU />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/data-pengawasan-bbm"
-              element={
-                <ProtectedRoute>
-                  <DataPengawasanBBM />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/tambah-pengawasan-bbm"
-              element={
-                <ProtectedRoute>
-                  <TambahPengawasanBBM />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/view-pengawasan/:id"
-              element={
-                <ProtectedRoute>
-                  <ViewPengawasanBBM />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin/edit-pengawasan/:id"
-              element={
-                <ProtectedRoute>
-                  <EditPengawasanBBM />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/artikel/:id" element={<SingleArticlePage />} />
-          </Routes>
-          <Toaster />
-        </div>
+              <Route
+                path="/admin/alat"
+                element={
+                  <ProtectedRoute>
+                    <DaftarAlat />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/data-tera/spbu"
+                element={
+                  <ProtectedRoute>
+                    <DataWajibTeraSPBU />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/data-tera/pasar"
+                element={
+                  <ProtectedRoute>
+                    <DataWajibTeraPasar />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/data-tera/umum"
+                element={
+                  <ProtectedRoute>
+                    <DataWajibTeraUmum />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/pengawasan-spu"
+                element={
+                  <ProtectedRoute>
+                    <PengawasanSPU />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/data-pengawasan-bbm"
+                element={
+                  <ProtectedRoute>
+                    <DataPengawasanBBM />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/tambah-pengawasan-bbm"
+                element={
+                  <ProtectedRoute>
+                    <TambahPengawasanBBM />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/view-pengawasan/:id"
+                element={
+                  <ProtectedRoute>
+                    <ViewPengawasanBBM />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/edit-pengawasan/:id"
+                element={
+                  <ProtectedRoute>
+                    <EditPengawasanBBM />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/artikel/:id" element={<SingleArticlePage />} />
+              <Route path="/pengajuan-tera" element={<FormPengajuanTera />} />
+              <Route
+                path="/admin/form-tera-ulang"
+                element={
+                  <ProtectedRoute>
+                    <FormTeraUlang />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+            <Toaster />
+          </div>
         </Router>
       </AuthContext.Provider>
     </ThemeProvider>

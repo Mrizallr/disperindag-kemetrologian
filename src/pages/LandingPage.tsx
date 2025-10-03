@@ -281,11 +281,7 @@ const LandingPage: React.FC = () => {
               className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 rounded-full px-8 py-4 text-base md:text-lg group"
               asChild
             >
-              <a
-                href="https://forms.google.com/your-form-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="/pengajuan-tera">
                 <ExternalLink className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
                 Ajukan Permohonan
               </a>

@@ -59,7 +59,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       label: "Data Permohonan",
       path: "/admin/permohonan",
     },
-    { icon: Repeat, label: "Data Perpanjang", path: "/admin/perpanjang" },
+    { icon: Repeat, label: "Tera Ulang", path: "/admin/perpanjang" },
     { icon: Scale3DIcon, label: "Pengawasan BBM", path: "/admin/data-pengawasan-bbm" },
     { icon: Scale, label: "Daftar Alat ", path: "/admin/alat" },
     { icon: FileText, label: "Artikel", path: "/admin/artikel" },

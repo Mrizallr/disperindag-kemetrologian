@@ -71,10 +71,10 @@ const LoginPage: React.FC = () => {
 
     const { data: listener } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        if (event === 'SIGNED_OUT' || !session) {
-          setEmail('');
-          setPassword('');
-          setError('');
+        if (event === "SIGNED_OUT" || !session) {
+          setEmail("");
+          setPassword("");
+          setError("");
         }
       }
     );

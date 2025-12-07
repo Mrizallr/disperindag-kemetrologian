@@ -675,7 +675,7 @@ const AdminDashboard: React.FC = () => {
                 </div>
               </div>
               <Button variant="outline" className="w-full" asChild>
-                <Link to="/admin/data-permohonan">
+                <Link to="/admin/permohonan">
                   <Eye className="w-4 h-4 mr-2" />
                   Lihat Semua Permohonan
                 </Link>

@@ -930,8 +930,6 @@ const LandingPage: React.FC = () => {
               </CardContent>
             </Card>
           </div>
-
-
         </div>
       </section>
 
@@ -942,9 +940,9 @@ const LandingPage: React.FC = () => {
             <div className="md:col-span-2">
               <div className="flex items-center space-x-4 group mb-6">
                 <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300 p-2">
-                  <img 
-                    src="/logo-disperindag.png" 
-                    alt="Logo Disperindag" 
+                  <img
+                    src="/logo-disperindag.png"
+                    alt="Logo Disperindag"
                     className="w-full h-full object-contain"
                   />
                 </div>
@@ -958,7 +956,9 @@ const LandingPage: React.FC = () => {
                 </div>
               </div>
               <p className="text-slate-300 leading-relaxed mb-6 max-w-md">
-                Platform layanan kemetrologian berbasis web untuk memudahkan masyarakat mengakses informasi, mengajukan permohonan, serta memantau proses tera/tera ulang secara transparan dan cepat.
+                Platform layanan kemetrologian berbasis web untuk memudahkan
+                masyarakat mengakses informasi, mengajukan permohonan, serta
+                memantau proses tera/tera ulang secara transparan dan cepat.
               </p>
               <div className="flex space-x-4">
                 <div className="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-colors cursor-pointer">
@@ -974,7 +974,7 @@ const LandingPage: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="font-bold text-slate-200 mb-4">📌 Layanan Kami</h3>
+              <h3 className="font-bold text-slate-200 mb-4"> Layanan Kami</h3>
               <ul className="space-y-2 text-sm">
                 <li>
                   <a href="#" className="hover:text-blue-400 transition-colors">
@@ -1001,7 +1001,7 @@ const LandingPage: React.FC = () => {
 
             <div>
               <h3 className="font-bold text-slate-200 mb-4">
-                🛠️ Dukungan Pengguna
+                Dukungan Pengguna
               </h3>
               <ul className="space-y-2 text-sm">
                 <li>

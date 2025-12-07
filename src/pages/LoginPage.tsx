@@ -21,31 +21,21 @@ import {
   EyeOff,
 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "../lib/supabase"; // Pastikan path benar
-import Captcha from "@/components/ui/captcha";
+import { supabase } from "../lib/supabase";
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState(""); // sesuai Supabase
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [failedAttempts, setFailedAttempts] = useState(0);
-  const [isCaptchaValid, setIsCaptchaValid] = useState(false);
-  const [resetCaptcha, setResetCaptcha] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
-
-    // Cek reCAPTCHA - wajib dari awal
-    // if (!isCaptchaValid) {
-    //   setError("Silakan selesaikan reCAPTCHA terlebih dahulu");
-    //   setIsLoading(false);
-    //   return;
-    // }
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -58,10 +48,6 @@ const LoginPage: React.FC = () => {
         setFailedAttempts(newFailedAttempts);
         setError("Email atau password salah");
         toast.error("Login gagal!");
-        
-        // Reset reCAPTCHA setelah gagal
-        setResetCaptcha(prev => !prev);
-        setIsCaptchaValid(false);
       } else {
         toast.success("Login berhasil!");
         setFailedAttempts(0);
@@ -83,7 +69,6 @@ const LoginPage: React.FC = () => {
     };
     checkSession();
 
-    // Listen for auth state changes
     const { data: listener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (event === 'SIGNED_OUT' || !session) {
@@ -191,11 +176,6 @@ const LoginPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* <Captcha 
-                onVerify={setIsCaptchaValid} 
-                reset={resetCaptcha}
-              /> */
-
               <Button
                 type="submit"
                 disabled={isLoading}
@@ -203,12 +183,8 @@ const LoginPage: React.FC = () => {
               >
                 {isLoading ? "Sedang masuk..." : "Masuk"}
               </Button>
-              
-              {/* <p className="text-sm text-orange-600 text-center">
-                Selesaikan reCAPTCHA untuk melanjutkan login
-              </p> */}
             </form>
-            </CardContent>
+          </CardContent>
         </Card>
       </div>
     </div>

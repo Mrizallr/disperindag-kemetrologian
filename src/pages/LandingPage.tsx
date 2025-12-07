@@ -47,7 +47,7 @@ const LandingPage: React.FC = () => {
     totalAlat: 0,
     totalPelakuUsaha: 0,
     totalUttp: 0,
-    totalArtikel: 0
+    totalArtikel: 0,
   });
 
   useEffect(() => {
@@ -64,32 +64,32 @@ const LandingPage: React.FC = () => {
     try {
       // Get total alat from daftar_alat
       const { count: totalAlat } = await supabase
-        .from('daftar_alat')
-        .select('*', { count: 'exact', head: true });
+        .from("daftar_alat")
+        .select("*", { count: "exact", head: true });
 
       // Get total pelaku usaha from pelaku_usaha
       const { count: totalPelakuUsaha } = await supabase
-        .from('pelaku_usaha')
-        .select('*', { count: 'exact', head: true });
+        .from("pelaku_usaha")
+        .select("*", { count: "exact", head: true });
 
       // Get total UTTP from uttp table
       const { count: totalUttp } = await supabase
-        .from('uttp')
-        .select('*', { count: 'exact', head: true });
+        .from("uttp")
+        .select("*", { count: "exact", head: true });
 
       // Get total artikel
       const { count: totalArtikel } = await supabase
-        .from('artikel')
-        .select('*', { count: 'exact', head: true });
+        .from("artikel")
+        .select("*", { count: "exact", head: true });
 
       setStats({
         totalAlat: totalAlat || 0,
         totalPelakuUsaha: totalPelakuUsaha || 0,
         totalUttp: totalUttp || 0,
-        totalArtikel: totalArtikel || 0
+        totalArtikel: totalArtikel || 0,
       });
     } catch (error) {
-      console.error('Error loading stats:', error);
+      console.error("Error loading stats:", error);
     }
   };
 
@@ -145,9 +145,9 @@ const LandingPage: React.FC = () => {
               onClick={() => scrollToSection("hero")}
             >
               <div className="w-11 h-11 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105 border border-blue-200 dark:border-white/20 p-1">
-                <img 
-                  src="/logo-disperindag.png" 
-                  alt="Logo Disperindag" 
+                <img
+                  src="/logo-disperindag.png"
+                  alt="Logo Disperindag"
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -271,8 +271,9 @@ const LandingPage: React.FC = () => {
           </h1>
 
           <p className="text-lg md:text-xl text-gray-700 dark:text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in-up delay-400">
-            Platform berbasis web yang memudahkan masyarakat dan pelaku usaha dalam mengakses informasi, 
-            mengajukan permohonan, serta memantau layanan kemetrologian dengan cepat dan transparan.
+            Platform berbasis web yang memudahkan masyarakat dan pelaku usaha
+            dalam mengakses informasi, mengajukan permohonan, serta memantau
+            layanan kemetrologian dengan cepat dan transparan.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in-up delay-600">
@@ -352,8 +353,6 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-
-
       {/* Enhanced Services Section */}
       <section
         id="layanan"
@@ -365,9 +364,11 @@ const LandingPage: React.FC = () => {
               Layanan Kemetrologian Disperindag ESDM
             </h2>
             <p className="text-xl text-gray-700 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
-              Layanan Kemetrologian Disperindag ESDM mencakup tera, tera ulang, pengawasan UTTP, serta konsultasi dan pengaduan. 
-              Melalui layanan ini, masyarakat dan pelaku usaha dapat memastikan alat ukur, takar, timbang, dan perlengkapannya (UTTP) 
-              tetap sesuai standar, adil, dan transparan.
+              Layanan Kemetrologian Disperindag ESDM mencakup tera, tera ulang,
+              pengawasan UTTP, serta konsultasi dan pengaduan. Melalui layanan
+              ini, masyarakat dan pelaku usaha dapat memastikan alat ukur,
+              takar, timbang, dan perlengkapannya (UTTP) tetap sesuai standar,
+              adil, dan transparan.
             </p>
           </div>
 
@@ -381,7 +382,9 @@ const LandingPage: React.FC = () => {
                   Tera/Tera Ulang
                 </CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
-                  Pemeriksaan pertama kali pada UTTP sebelum digunakan secara resmi dan berkala pada UTTP yang sudah pernah ditera sebelumnya
+                  Pemeriksaan pertama kali pada UTTP sebelum digunakan secara
+                  resmi dan berkala pada UTTP yang sudah pernah ditera
+                  sebelumnya
                 </CardDescription>
               </CardHeader>
               <CardContent className="px-8 pb-8">
@@ -407,7 +410,8 @@ const LandingPage: React.FC = () => {
                   Pengawasan UTTP
                 </CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
-                  Pemeriksaan di lapangan untuk memastikan alat ukur/timbang sesuai standar dan tidak merugikan konsumen
+                  Pemeriksaan di lapangan untuk memastikan alat ukur/timbang
+                  sesuai standar dan tidak merugikan konsumen
                 </CardDescription>
               </CardHeader>
               <CardContent className="px-8 pb-8">
@@ -433,7 +437,8 @@ const LandingPage: React.FC = () => {
                   Konsultasi & Pengaduan
                 </CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
-                  Layanan bagi masyarakat jika ada dugaan kecurangan dalam penggunaan alat ukur
+                  Layanan bagi masyarakat jika ada dugaan kecurangan dalam
+                  penggunaan alat ukur
                 </CardDescription>
               </CardHeader>
               <CardContent className="px-8 pb-8">
@@ -581,17 +586,26 @@ const LandingPage: React.FC = () => {
                   <Users className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900 dark:text-slate-100">PT. Maju Bersama</h4>
-                  <p className="text-sm text-gray-600 dark:text-slate-400">Retail & Trading</p>
+                  <h4 className="font-bold text-gray-900 dark:text-slate-100">
+                    PT. Maju Bersama
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-slate-400">
+                    Retail & Trading
+                  </p>
                 </div>
               </div>
               <div className="flex mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                  <Star
+                    key={i}
+                    className="w-5 h-5 text-yellow-400 fill-current"
+                  />
                 ))}
               </div>
               <p className="text-gray-700 dark:text-slate-300 leading-relaxed">
-                "Pelayanan tera di Disperindag ESDM sangat memuaskan. Petugas profesional dan proses cepat. Alat timbangan kami sekarang sudah tersertifikasi resmi."
+                "Pelayanan tera di Disperindag ESDM sangat memuaskan. Petugas
+                profesional dan proses cepat. Alat timbangan kami sekarang sudah
+                tersertifikasi resmi."
               </p>
             </Card>
 
@@ -601,17 +615,26 @@ const LandingPage: React.FC = () => {
                   <Scale className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900 dark:text-slate-100">CV. Sukses Mandiri</h4>
-                  <p className="text-sm text-gray-600 dark:text-slate-400">Manufacturing</p>
+                  <h4 className="font-bold text-gray-900 dark:text-slate-100">
+                    CV. Sukses Mandiri
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-slate-400">
+                    Manufacturing
+                  </p>
                 </div>
               </div>
               <div className="flex mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                  <Star
+                    key={i}
+                    className="w-5 h-5 text-yellow-400 fill-current"
+                  />
                 ))}
               </div>
               <p className="text-gray-700 dark:text-slate-300 leading-relaxed">
-                "Proses tera ulang sangat mudah dan tidak ribet. Petugas datang langsung ke pabrik kami. Sertifikat langsung jadi dalam 2 hari kerja."
+                "Proses tera ulang sangat mudah dan tidak ribet. Petugas datang
+                langsung ke pabrik kami. Sertifikat langsung jadi dalam 2 hari
+                kerja."
               </p>
             </Card>
 
@@ -621,21 +644,30 @@ const LandingPage: React.FC = () => {
                   <Award className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900 dark:text-slate-100">Toko Berkah Jaya</h4>
-                  <p className="text-sm text-gray-600 dark:text-slate-400">Retail Store</p>
+                  <h4 className="font-bold text-gray-900 dark:text-slate-100">
+                    Toko Berkah Jaya
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-slate-400">
+                    Retail Store
+                  </p>
                 </div>
               </div>
               <div className="flex mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                  <Star
+                    key={i}
+                    className="w-5 h-5 text-yellow-400 fill-current"
+                  />
                 ))}
               </div>
               <p className="text-gray-700 dark:text-slate-300 leading-relaxed">
-                "Layanan konsultasi sangat membantu. Ketika ada masalah dengan timbangan, langsung ditangani dengan baik. Terima kasih Disperindag ESDM!"
+                "Layanan konsultasi sangat membantu. Ketika ada masalah dengan
+                timbangan, langsung ditangani dengan baik. Terima kasih
+                Disperindag ESDM!"
               </p>
             </Card>
           </div>
-          
+
           <div className="text-center mt-16">
             <Card className="border-0 shadow-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 rounded-2xl p-8 max-w-2xl mx-auto">
               <CardContent className="p-0">
@@ -643,9 +675,10 @@ const LandingPage: React.FC = () => {
                   Bagikan Pengalaman Anda
                 </h3>
                 <p className="text-blue-800 dark:text-blue-300 mb-6 leading-relaxed">
-                  Sudah menggunakan layanan kemetrologian kami? Bagikan testimoni Anda untuk membantu pelaku usaha lainnya.
+                  Sudah menggunakan layanan kemetrologian kami? Bagikan
+                  testimoni Anda untuk membantu pelaku usaha lainnya.
                 </p>
-                <Button 
+                <Button
                   className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105"
                   asChild
                 >
@@ -684,8 +717,10 @@ const LandingPage: React.FC = () => {
               </CardHeader>
               <CardContent className="px-6 pb-6">
                 <p className="text-gray-700 dark:text-slate-300 leading-relaxed">
-                  Layanan kemetrologian adalah pelayanan untuk memastikan alat ukur, takar, timbang, dan perlengkapannya (UTTP) 
-                  sesuai standar yang berlaku. Meliputi tera pertama kali, tera ulang, pengawasan, serta konsultasi dan pengaduan.
+                  Layanan kemetrologian adalah pelayanan untuk memastikan alat
+                  ukur, takar, timbang, dan perlengkapannya (UTTP) sesuai
+                  standar yang berlaku. Meliputi tera pertama kali, tera ulang,
+                  pengawasan, serta konsultasi dan pengaduan.
                 </p>
               </CardContent>
             </Card>
@@ -701,8 +736,10 @@ const LandingPage: React.FC = () => {
               </CardHeader>
               <CardContent className="px-6 pb-6">
                 <p className="text-gray-700 dark:text-slate-300 leading-relaxed">
-                  Siapkan dokumen persyaratan (surat permohonan, fotocopy KTP, SIUP untuk usaha), bawa alat dalam kondisi bersih, 
-                  datang ke kantor Disperindag ESDM pada jam kerja, atau hubungi kami untuk informasi lebih lanjut.
+                  Siapkan dokumen persyaratan (surat permohonan, fotocopy KTP,
+                  SIUP untuk usaha), bawa alat dalam kondisi bersih, datang ke
+                  kantor Disperindag ESDM pada jam kerja, atau hubungi kami
+                  untuk informasi lebih lanjut.
                 </p>
               </CardContent>
             </Card>
@@ -718,8 +755,10 @@ const LandingPage: React.FC = () => {
               </CardHeader>
               <CardContent className="px-6 pb-6">
                 <p className="text-gray-700 dark:text-slate-300 leading-relaxed">
-                  Proses tera biasanya memakan waktu 1-3 hari kerja tergantung jenis dan jumlah alat. 
-                  Biaya tera sesuai dengan tarif yang ditetapkan pemerintah. Hubungi kami untuk informasi tarif terbaru.
+                  Proses tera biasanya memakan waktu 1-3 hari kerja tergantung
+                  jenis dan jumlah alat. Biaya tera sesuai dengan tarif yang
+                  ditetapkan pemerintah. Hubungi kami untuk informasi tarif
+                  terbaru.
                 </p>
               </CardContent>
             </Card>
@@ -818,7 +857,9 @@ const LandingPage: React.FC = () => {
               Siap Membantu Anda
             </h2>
             <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-              Tim kami siap memberikan layanan, konsultasi, dan dukungan terkait kemetrologian untuk masyarakat serta pelaku usaha di Kabupaten Garut.
+              Tim kami siap memberikan layanan, konsultasi, dan dukungan terkait
+              kemetrologian untuk masyarakat serta pelaku usaha di Kabupaten
+              Garut.
             </p>
           </div>
 
@@ -829,7 +870,7 @@ const LandingPage: React.FC = () => {
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                     <MapPin className="w-6 h-6 text-white" />
                   </div>
-                  📍 Alamat Kantor
+                  Alamat Kantor
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-white/90 p-8 pt-0">
@@ -849,7 +890,7 @@ const LandingPage: React.FC = () => {
                   <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Phone className="w-6 h-6 text-white" />
                   </div>
-                  📞 Kontak Layanan
+                  Kontak Layanan
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-white/90 space-y-4 p-8 pt-0">
@@ -870,7 +911,7 @@ const LandingPage: React.FC = () => {
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Clock className="w-6 h-6 text-white" />
                   </div>
-                  🕒 Jam Operasional
+                  Jam Operasional
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-white/90 space-y-3 p-8 pt-0">
@@ -898,14 +939,16 @@ const LandingPage: React.FC = () => {
                 🌐 Kemetrologian Digital Garut
               </h3>
               <p className="text-white/90 leading-relaxed">
-                Platform layanan kemetrologian berbasis web untuk memudahkan masyarakat mengakses informasi, mengajukan permohonan, serta memantau proses tera/tera ulang secara transparan dan cepat.
+                Platform layanan kemetrologian berbasis web untuk memudahkan
+                masyarakat mengakses informasi, mengajukan permohonan, serta
+                memantau proses tera/tera ulang secara transparan dan cepat.
               </p>
             </Card>
 
             <Card className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8">
               <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
                 <CheckCircle className="w-6 h-6 text-green-400" />
-                📌 Layanan Kami
+                Layanan Kami
               </h3>
               <ul className="space-y-2 text-white/90">
                 <li className="flex items-center gap-2">
@@ -949,8 +992,9 @@ const LandingPage: React.FC = () => {
                 </div>
               </div>
               <p className="text-slate-300 leading-relaxed mb-6 max-w-md">
-                Platform digital terdepan untuk layanan kemetrologian dengan teknologi AI, IoT, dan Blockchain. 
-                Melayani dengan inovasi, integritas, dan kepercayaan.
+                Platform digital terdepan untuk layanan kemetrologian dengan
+                teknologi AI, IoT, dan Blockchain. Melayani dengan inovasi,
+                integritas, dan kepercayaan.
               </p>
               <div className="flex space-x-4">
                 <div className="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-colors cursor-pointer">
@@ -964,28 +1008,62 @@ const LandingPage: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div>
               <h3 className="font-bold text-slate-200 mb-4">📌 Layanan Kami</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Layanan Tera & Tera Ulang</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Registrasi Pelaku Usaha</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Informasi Sertifikat</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Dashboard Monitoring</a></li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Layanan Tera & Tera Ulang
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Registrasi Pelaku Usaha
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Informasi Sertifikat
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Dashboard Monitoring
+                  </a>
+                </li>
               </ul>
             </div>
-            
+
             <div>
-              <h3 className="font-bold text-slate-200 mb-4">🛠️ Dukungan Pengguna</h3>
+              <h3 className="font-bold text-slate-200 mb-4">
+                🛠️ Dukungan Pengguna
+              </h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Panduan Pengguna</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">FAQ</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Pusat Bantuan</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Status Layanan</a></li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Panduan Pengguna
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    FAQ
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Pusat Bantuan
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Status Layanan
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-slate-800 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left space-y-4 md:space-y-0">
               <div>
@@ -993,13 +1071,20 @@ const LandingPage: React.FC = () => {
                   © 2024 Dinas Perindustrian dan Perdagangan ESDM
                 </p>
                 <p className="text-sm text-slate-500">
-                  Semua hak dilindungi undang-undang • Powered by Advanced Technology
+                  Semua hak dilindungi undang-undang • Powered by Advanced
+                  Technology
                 </p>
               </div>
               <div className="flex items-center space-x-6 text-sm">
-                <a href="#" className="hover:text-blue-400 transition-colors">Kebijakan Privasi</a>
-                <a href="#" className="hover:text-blue-400 transition-colors">Syarat & Ketentuan</a>
-                <a href="#" className="hover:text-blue-400 transition-colors">Sitemap</a>
+                <a href="#" className="hover:text-blue-400 transition-colors">
+                  Kebijakan Privasi
+                </a>
+                <a href="#" className="hover:text-blue-400 transition-colors">
+                  Syarat & Ketentuan
+                </a>
+                <a href="#" className="hover:text-blue-400 transition-colors">
+                  Sitemap
+                </a>
               </div>
             </div>
           </div>

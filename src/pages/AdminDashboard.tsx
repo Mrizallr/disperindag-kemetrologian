@@ -596,32 +596,6 @@ const AdminDashboard: React.FC = () => {
 
         {/* Additional Charts */}
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Jenis Lapak Chart */}
-          <Card className="border-0 shadow-lg bg-white dark:bg-slate-800 dark:border dark:border-slate-700/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-slate-900 dark:text-slate-100">
-                <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
-                  <BarChart3 className="w-4 h-4 text-white" />
-                </div>
-                Distribusi Jenis Lapak
-              </CardTitle>
-              <CardDescription className="text-slate-600 dark:text-slate-400">
-                Perbandingan jumlah pelaku usaha berdasarkan jenis lapak
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={chartData.jenisLapak}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" type="category" />
-                  <YAxis type="number" />
-                  <Tooltip />
-                  <Bar dataKey="jumlah" fill="#3b82f6" name="Jumlah Terdaftar" />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-
           {/* Statistik Permohonan Tera */}
           <Card className="border-0 shadow-lg bg-white dark:bg-slate-800 dark:border dark:border-slate-700/50">
             <CardHeader>
@@ -682,66 +656,8 @@ const AdminDashboard: React.FC = () => {
               </Button>
             </CardContent>
           </Card>
-        </div>
 
-        {/* Recent Data */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          <Card className="border-0 shadow-lg bg-white dark:bg-slate-800 dark:border dark:border-slate-700/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-slate-900 dark:text-slate-100">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                  <FileText className="w-4 h-4 text-white" />
-                </div>
-                Data Terbaru
-              </CardTitle>
-              <CardDescription className="text-slate-600 dark:text-slate-400">
-                Pelaku usaha yang baru didaftarkan
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {loading ? (
-                  <p>Loading...</p>
-                ) : (
-                  recentData.slice(0, 3).map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-xl border border-slate-200 dark:border-slate-600/50 hover:bg-slate-100 dark:hover:bg-slate-700/70 transition-colors"
-                    >
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-slate-900 dark:text-slate-100">
-                          {item.nama}
-                        </h4>
-                        <p className="text-sm text-slate-600 dark:text-slate-300">
-                          {item.jenis} - {item.lokasi}
-                        </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                          {item.uttpCount} UTTP terdaftar
-                        </p>
-                      </div>
-                      <Badge
-                        variant={
-                          item.status === "Aktif" ? "default" : "secondary"
-                        }
-                        className={`ml-4 ${
-                          item.status === "Aktif" 
-                            ? "bg-green-100 text-green-800 border-green-200 hover:bg-green-200" 
-                            : ""
-                        }`}
-                      >
-                        {item.status}
-                      </Badge>
-                    </div>
-                  ))
-                )}
-              </div>
-              <Button variant="outline" className="w-full mt-4" asChild>
-                <Link to="/admin/data-pelaku-usaha">Lihat Semua Data</Link>
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Chart Data Tera */}
+          {/* Distribusi Data Tera */}
           <Card className="border-0 shadow-lg bg-white dark:bg-slate-800 dark:border dark:border-slate-700/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-3 text-slate-900 dark:text-slate-100">

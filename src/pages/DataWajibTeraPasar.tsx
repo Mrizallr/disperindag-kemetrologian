@@ -63,6 +63,9 @@ const DataWajibTeraPasar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [filterJenis, setFilterJenis] = useState<string>("all");
+  const [filterStartDate, setFilterStartDate] = useState<string>("");
+  const [filterEndDate, setFilterEndDate] = useState<string>("");
+  const [showDateFilter, setShowDateFilter] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<DataTeraPasar | null>(null);
   const [viewingItem, setViewingItem] = useState<DataTeraPasar | null>(null);
@@ -336,7 +339,33 @@ const DataWajibTeraPasar: React.FC = () => {
   };
 
   const handleExport = () => {
-    const exportData = filteredData.map((item, index) => ({
+    // Filter data berdasarkan tanggal jika ada
+    let dataToExport = filteredData;
+    
+    if (filterStartDate || filterEndDate) {
+      dataToExport = filteredData.filter((item) => {
+        const teraDate = item.uttpList.length > 0 && item.uttpList[0].tanggal_tera
+          ? new Date(item.uttpList[0].tanggal_tera)
+          : null;
+        
+        if (!teraDate) return false;
+        
+        const startDate = filterStartDate ? new Date(filterStartDate) : null;
+        const endDate = filterEndDate ? new Date(filterEndDate) : null;
+        
+        if (startDate && endDate) {
+          return teraDate >= startDate && teraDate <= endDate;
+        } else if (startDate) {
+          return teraDate >= startDate;
+        } else if (endDate) {
+          return teraDate <= endDate;
+        }
+        
+        return true;
+      });
+    }
+
+    const exportData = dataToExport.map((item, index) => ({
       No: index + 1,
       NamaWajibTera: item.namaWajibTera || "-",
       JenisWajibTera: item.jenisWajibTera || "-",
@@ -349,20 +378,35 @@ const DataWajibTeraPasar: React.FC = () => {
     }));
 
     const doc = new jsPDF("landscape");
-    doc.text("Data Wajib Tera Pasar", 14, 15);
+    
+    let title = "Data Wajib Tera Pasar";
+    if (filterStartDate || filterEndDate) {
+      title += " - Periode: ";
+      if (filterStartDate) title += new Date(filterStartDate).toLocaleDateString("id-ID");
+      if (filterStartDate && filterEndDate) title += " s/d ";
+      if (filterEndDate) title += new Date(filterEndDate).toLocaleDateString("id-ID");
+    }
+    
+    doc.text(title, 14, 15);
     autoTable(doc, {
       head: [[
         "No", "Nama Wajib Tera", "Jenis", "Nama Usaha", "Nama Pemilik", 
         "Alamat", "Nomor Izin", "Jumlah UTTP", "Status"
       ]],
       body: exportData.map(d => Object.values(d)),
-      foot: [[`Total: ${filteredData.length} data`, "", "", "", "", "", "", "", ""]],
+      foot: [[`Total: ${dataToExport.length} data`, "", "", "", "", "", "", "", ""]],
       styles: { fontSize: 8 },
       headStyles: { fillColor: [33, 150, 243] },
       footStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: "bold" },
       startY: 20
     });
-    doc.save("data-tera-pasar.pdf");
+    
+    const fileName = filterStartDate || filterEndDate
+      ? `data-tera-pasar-${filterStartDate || 'awal'}-${filterEndDate || 'akhir'}.pdf`
+      : "data-tera-pasar.pdf";
+    
+    doc.save(fileName);
+    toast.success(`PDF berhasil diexport (${dataToExport.length} data)`);
   };
 
   const resetForm = () => {
@@ -451,13 +495,62 @@ const DataWajibTeraPasar: React.FC = () => {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button
-              onClick={handleExport}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Export PDF
-            </Button>
+            <Dialog open={showDateFilter} onOpenChange={setShowDateFilter}>
+              <DialogTrigger asChild>
+                <Button className="bg-green-600 hover:bg-green-700 text-white">
+                  <Download className="w-4 h-4 mr-2" />
+                  Export PDF
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Export Data ke PDF</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <p className="text-sm text-gray-600">
+                    Filter data berdasarkan tanggal tera (opsional)
+                  </p>
+                  <div>
+                    <Label htmlFor="startDate">Tanggal Mulai</Label>
+                    <Input
+                      id="startDate"
+                      type="date"
+                      value={filterStartDate}
+                      onChange={(e) => setFilterStartDate(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="endDate">Tanggal Akhir</Label>
+                    <Input
+                      id="endDate"
+                      type="date"
+                      value={filterEndDate}
+                      onChange={(e) => setFilterEndDate(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setFilterStartDate("");
+                        setFilterEndDate("");
+                      }}
+                    >
+                      Reset Filter
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleExport();
+                        setShowDateFilter(false);
+                      }}
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Export
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button onClick={() => resetForm()}>

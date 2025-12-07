@@ -86,6 +86,9 @@ const DataWajibTeraUmum: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [filterJenis, setFilterJenis] = useState<string>("all");
+  const [filterStartDate, setFilterStartDate] = useState<string>("");
+  const [filterEndDate, setFilterEndDate] = useState<string>("");
+  const [showDateFilter, setShowDateFilter] = useState(false);
   const [formData, setFormData] = useState<Omit<DataTeraUmum, "id">>({
     namaWajibTera: "",
     jenisWajibTera: "Perusahaan",
@@ -393,7 +396,34 @@ const DataWajibTeraUmum: React.FC = () => {
   };
 
   const handleExport = () => {
-    const exportData = filteredData.map((item, index) => ({
+    // Filter data berdasarkan tanggal jika ada
+    let dataToExport = filteredData;
+    
+    if (filterStartDate || filterEndDate) {
+      dataToExport = filteredData.filter((item) => {
+        // Ambil tanggal tera dari UTTP pertama
+        const teraDate = item.uttpList.length > 0 && item.uttpList[0].tanggal_tera
+          ? new Date(item.uttpList[0].tanggal_tera)
+          : null;
+        
+        if (!teraDate) return false;
+        
+        const startDate = filterStartDate ? new Date(filterStartDate) : null;
+        const endDate = filterEndDate ? new Date(filterEndDate) : null;
+        
+        if (startDate && endDate) {
+          return teraDate >= startDate && teraDate <= endDate;
+        } else if (startDate) {
+          return teraDate >= startDate;
+        } else if (endDate) {
+          return teraDate <= endDate;
+        }
+        
+        return true;
+      });
+    }
+
+    const exportData = dataToExport.map((item, index) => ({
       No: index + 1,
       NamaUsaha: item.namaUsaha,
       NamaPemilik: item.namaPemilik,
@@ -402,13 +432,27 @@ const DataWajibTeraUmum: React.FC = () => {
       JenisUTTP: item.uttpList.map((u) => u.jenis).join(", "),
       MerkUTTP: item.uttpList.map((u) => u.merk).join(", "),
       Kapasitas: item.kapasitas,
-      TanggalTera: new Date(item.tanggalTera).toLocaleDateString("id-ID"),
-      TanggalBerlaku: new Date(item.tanggalBerlaku).toLocaleDateString("id-ID"),
+      TanggalTera: item.uttpList.length > 0 && item.uttpList[0].tanggal_tera
+        ? new Date(item.uttpList[0].tanggal_tera).toLocaleDateString("id-ID")
+        : "-",
+      TanggalBerlaku: item.uttpList.length > 0 && item.uttpList[0].tanggal_berlaku
+        ? new Date(item.uttpList[0].tanggal_berlaku).toLocaleDateString("id-ID")
+        : "-",
       Status: item.status,
     }));
 
     const doc = new jsPDF("landscape");
-    doc.text("Data Tera Umum", 14, 15);
+    
+    // Title dengan info filter tanggal
+    let title = "Data Tera Umum";
+    if (filterStartDate || filterEndDate) {
+      title += " - Periode: ";
+      if (filterStartDate) title += new Date(filterStartDate).toLocaleDateString("id-ID");
+      if (filterStartDate && filterEndDate) title += " s/d ";
+      if (filterEndDate) title += new Date(filterEndDate).toLocaleDateString("id-ID");
+    }
+    
+    doc.text(title, 14, 15);
     autoTable(doc, {
       head: [
         [
@@ -428,7 +472,7 @@ const DataWajibTeraUmum: React.FC = () => {
       body: exportData.map((d) => Object.values(d)),
       foot: [
         [
-          "Total: " + filteredData.length + " data",
+          "Total: " + dataToExport.length + " data",
           "",
           "",
           "",
@@ -451,7 +495,13 @@ const DataWajibTeraUmum: React.FC = () => {
       },
       startY: 20,
     });
-    doc.save("data-tera-umum.pdf");
+    
+    const fileName = filterStartDate || filterEndDate
+      ? `data-tera-umum-${filterStartDate || 'awal'}-${filterEndDate || 'akhir'}.pdf`
+      : "data-tera-umum.pdf";
+    
+    doc.save(fileName);
+    toast.success(`PDF berhasil diexport (${dataToExport.length} data)`);
   };
 
   return (
@@ -468,10 +518,62 @@ const DataWajibTeraUmum: React.FC = () => {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={handleExport}>
-              <Download className="w-4 h-4 mr-2" />
-              Export PDF
-            </Button>
+            <Dialog open={showDateFilter} onOpenChange={setShowDateFilter}>
+              <DialogTrigger asChild>
+                <Button variant="outline">
+                  <Download className="w-4 h-4 mr-2" />
+                  Export PDF
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Export Data ke PDF</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <p className="text-sm text-gray-600">
+                    Filter data berdasarkan tanggal tera (opsional)
+                  </p>
+                  <div>
+                    <Label htmlFor="startDate">Tanggal Mulai</Label>
+                    <Input
+                      id="startDate"
+                      type="date"
+                      value={filterStartDate}
+                      onChange={(e) => setFilterStartDate(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="endDate">Tanggal Akhir</Label>
+                    <Input
+                      id="endDate"
+                      type="date"
+                      value={filterEndDate}
+                      onChange={(e) => setFilterEndDate(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setFilterStartDate("");
+                        setFilterEndDate("");
+                      }}
+                    >
+                      Reset Filter
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleExport();
+                        setShowDateFilter(false);
+                      }}
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Export
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button onClick={() => resetForm()}>

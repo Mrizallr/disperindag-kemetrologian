@@ -378,7 +378,7 @@ const AdminDashboard: React.FC = () => {
               Selamat datang di sistem pengelolaan data kemetrologian
             </p>
           </div>
-          <div className="flex gap-3">
+          {/* <div className="flex gap-3">
             <Button asChild>
               <Link to="/admin/tambah-data">
                 <Plus className="w-4 h-4 mr-2" />
@@ -391,7 +391,7 @@ const AdminDashboard: React.FC = () => {
                 Lihat Semua Data
               </Link>
             </Button>
-          </div>
+          </div> */}
         </div>
 
         {/* Enhanced Stats Cards */}
@@ -775,7 +775,7 @@ const AdminDashboard: React.FC = () => {
         </div>
 
         {/* Quick Actions */}
-        <Card className="border-0 shadow-lg bg-white dark:bg-slate-800 dark:border dark:border-slate-700/50">
+        {/* <Card className="border-0 shadow-lg bg-white dark:bg-slate-800 dark:border dark:border-slate-700/50">
           <CardHeader>
             <CardTitle className="text-slate-900 dark:text-slate-100">Aksi Cepat</CardTitle>
             <CardDescription className="text-slate-600 dark:text-slate-400">
@@ -802,7 +802,7 @@ const AdminDashboard: React.FC = () => {
               </Button>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </AdminLayout>
   );

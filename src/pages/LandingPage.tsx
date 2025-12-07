@@ -815,10 +815,10 @@ const LandingPage: React.FC = () => {
               Hubungi Kami
             </Badge>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Siap Membantu Anda 24/7
+              Siap Membantu Anda
             </h2>
             <p className="text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-              Tim ahli kami siap memberikan konsultasi dan dukungan teknis untuk kebutuhan kemetrologian Anda
+              Tim kami siap memberikan layanan, konsultasi, dan dukungan terkait kemetrologian untuk masyarakat serta pelaku usaha di Kabupaten Garut.
             </p>
           </div>
 
@@ -829,16 +829,16 @@ const LandingPage: React.FC = () => {
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                     <MapPin className="w-6 h-6 text-white" />
                   </div>
-                  Alamat Kantor
+                  📍 Alamat Kantor
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-white/90 p-8 pt-0">
                 <p className="leading-relaxed">
-                  Dinas Perindustrian dan Perdagangan ESDM
+                  Dinas Perindustrian, Perdagangan, dan ESDM Kabupaten Garut
                   <br />
-                  Jl. Merdeka Raya No. 15
+                  Jl. Patriot No. 15
                   <br />
-                  Jakarta Pusat, DKI Jakarta 10110
+                  Garut, Jawa Barat 44151
                 </p>
               </CardContent>
             </Card>
@@ -849,17 +849,17 @@ const LandingPage: React.FC = () => {
                   <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Phone className="w-6 h-6 text-white" />
                   </div>
-                  Kontak Langsung
+                  📞 Kontak Layanan
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-white/90 space-y-4 p-8 pt-0">
                 <div className="flex items-center gap-3 hover:text-white transition-colors">
                   <Phone className="w-5 h-5 text-green-400" />
-                  <span>(021) 3456-7890</span>
+                  <span>(0262) 123456</span>
                 </div>
                 <div className="flex items-center gap-3 hover:text-white transition-colors">
                   <Mail className="w-5 h-5 text-blue-400" />
-                  <span>info@kemetrologian.go.id</span>
+                  <span>disperindag@garutkab.go.id</span>
                 </div>
               </CardContent>
             </Card>
@@ -870,23 +870,61 @@ const LandingPage: React.FC = () => {
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Clock className="w-6 h-6 text-white" />
                   </div>
-                  Jam Operasional
+                  🕒 Jam Operasional
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-white/90 space-y-3 p-8 pt-0">
                 <div className="flex justify-between">
-                  <span>Senin - Kamis</span>
-                  <span className="font-semibold">08:00 - 15:30</span>
+                  <span>Senin – Kamis</span>
+                  <span className="font-semibold">08:00 – 15:30</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Jumat</span>
-                  <span className="font-semibold">08:00 - 15:00</span>
+                  <span className="font-semibold">08:00 – 15:00</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Online Support</span>
+                  <span>Layanan Online</span>
                   <span className="font-semibold text-green-400">24/7</span>
                 </div>
               </CardContent>
+            </Card>
+          </div>
+
+          {/* Additional Info Section */}
+          <div className="mt-16 grid md:grid-cols-2 gap-8">
+            <Card className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8">
+              <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+                <Globe className="w-6 h-6 text-blue-400" />
+                🌐 Kemetrologian Digital Garut
+              </h3>
+              <p className="text-white/90 leading-relaxed">
+                Platform layanan kemetrologian berbasis web untuk memudahkan masyarakat mengakses informasi, mengajukan permohonan, serta memantau proses tera/tera ulang secara transparan dan cepat.
+              </p>
+            </Card>
+
+            <Card className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8">
+              <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+                <CheckCircle className="w-6 h-6 text-green-400" />
+                📌 Layanan Kami
+              </h3>
+              <ul className="space-y-2 text-white/90">
+                <li className="flex items-center gap-2">
+                  <ArrowRight className="w-4 h-4 text-blue-400" />
+                  Layanan Tera & Tera Ulang
+                </li>
+                <li className="flex items-center gap-2">
+                  <ArrowRight className="w-4 h-4 text-blue-400" />
+                  Registrasi Pelaku Usaha
+                </li>
+                <li className="flex items-center gap-2">
+                  <ArrowRight className="w-4 h-4 text-blue-400" />
+                  Informasi Sertifikat
+                </li>
+                <li className="flex items-center gap-2">
+                  <ArrowRight className="w-4 h-4 text-blue-400" />
+                  Dashboard Monitoring
+                </li>
+              </ul>
             </Card>
           </div>
         </div>
@@ -928,22 +966,22 @@ const LandingPage: React.FC = () => {
             </div>
             
             <div>
-              <h3 className="font-bold text-slate-200 mb-4">Layanan</h3>
+              <h3 className="font-bold text-slate-200 mb-4">📌 Layanan Kami</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Smart Tera & Tera Ulang</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Business Registry</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Blockchain Certificate</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Analytics Dashboard</a></li>
+                <li><a href="#" className="hover:text-blue-400 transition-colors">Layanan Tera & Tera Ulang</a></li>
+                <li><a href="#" className="hover:text-blue-400 transition-colors">Registrasi Pelaku Usaha</a></li>
+                <li><a href="#" className="hover:text-blue-400 transition-colors">Informasi Sertifikat</a></li>
+                <li><a href="#" className="hover:text-blue-400 transition-colors">Dashboard Monitoring</a></li>
               </ul>
             </div>
             
             <div>
-              <h3 className="font-bold text-slate-200 mb-4">Dukungan</h3>
+              <h3 className="font-bold text-slate-200 mb-4">🛠️ Dukungan Pengguna</h3>
               <ul className="space-y-2 text-sm">
                 <li><a href="#" className="hover:text-blue-400 transition-colors">Panduan Pengguna</a></li>
                 <li><a href="#" className="hover:text-blue-400 transition-colors">FAQ</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Kontak Support</a></li>
-                <li><a href="#" className="hover:text-blue-400 transition-colors">Status Sistem</a></li>
+                <li><a href="#" className="hover:text-blue-400 transition-colors">Pusat Bantuan</a></li>
+                <li><a href="#" className="hover:text-blue-400 transition-colors">Status Layanan</a></li>
               </ul>
             </div>
           </div>

@@ -255,7 +255,7 @@ const LandingPage: React.FC = () => {
             className="mb-8 px-6 py-3 text-sm font-semibold rounded-full bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 dark:from-blue-900/30 dark:to-purple-900/30 dark:text-blue-300 animate-fade-in-up hover:scale-105 transition-transform duration-300 border border-blue-200 dark:border-blue-800 shadow-lg"
           >
             <Sparkles className="w-4 h-4 mr-2" />
-            Layanan Digital Kemetrologian Terdepan
+            Disperindag ESDM
           </Badge>
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-slate-100 mb-8 leading-tight tracking-tight animate-fade-in-up delay-200">
@@ -272,8 +272,8 @@ const LandingPage: React.FC = () => {
 
           <p className="text-lg md:text-xl text-gray-700 dark:text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed animate-fade-in-up delay-400">
             Platform berbasis web yang memudahkan masyarakat dan pelaku usaha
-            dalam mengakses informasi, mengajukan permohonan, serta memantau
-            layanan kemetrologian dengan cepat dan transparan.
+            dalam mengajukan permohonan serta memantau layanan kemetrologian
+            secara digital dan transparan.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in-up delay-600">
@@ -287,7 +287,7 @@ const LandingPage: React.FC = () => {
                 Ajukan Permohonan
               </a>
             </Button>
-            <Button
+            {/* <Button
               variant="outline"
               size="lg"
               className="border-blue-600 text-blue-600 hover:bg-blue-50 hover:text-blue-700 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-900/20 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 rounded-full px-8 py-4 text-base md:text-lg group"
@@ -295,7 +295,7 @@ const LandingPage: React.FC = () => {
             >
               <FileText className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
               Panduan Layanan
-            </Button>
+            </Button> */}
           </div>
 
           {/* Enhanced Stats Section */}
@@ -568,7 +568,7 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 px-4 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
+      {/* <section className="py-24 px-4 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
         <div className="w-full px-4">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-slate-100 mb-6">
@@ -691,7 +691,7 @@ const LandingPage: React.FC = () => {
             </Card>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ Section */}
       <section className="py-24 px-4 bg-white dark:bg-slate-900">
@@ -744,24 +744,7 @@ const LandingPage: React.FC = () => {
               </CardContent>
             </Card>
 
-            <Card className="border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300">
-              <CardHeader className="p-6">
-                <CardTitle className="text-xl font-bold text-gray-900 dark:text-slate-100 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">3</span>
-                  </div>
-                  Berapa lama proses tera dan berapa biayanya?
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-6 pb-6">
-                <p className="text-gray-700 dark:text-slate-300 leading-relaxed">
-                  Proses tera biasanya memakan waktu 1-3 hari kerja tergantung
-                  jenis dan jumlah alat. Biaya tera sesuai dengan tarif yang
-                  ditetapkan pemerintah. Hubungi kami untuk informasi tarif
-                  terbaru.
-                </p>
-              </CardContent>
-            </Card>
+
           </div>
         </div>
       </section>

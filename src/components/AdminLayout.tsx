@@ -128,7 +128,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           <nav className="flex-1 p-4 overflow-y-auto">
             <div className="space-y-2">
               {/* Menu items sebelum Data Tera */}
-              {sidebarItems.slice(0, 1).map((item) => {
+              {sidebarItems.slice(0, 2).map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link
@@ -187,7 +187,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               </div>
               
               {/* Sisa menu items */}
-              {sidebarItems.slice(2).map((item) => {
+              {sidebarItems.slice(3).map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link

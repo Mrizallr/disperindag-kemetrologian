@@ -187,7 +187,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               </div>
               
               {/* Sisa menu items */}
-              {sidebarItems.slice(3).map((item) => {
+              {sidebarItems.slice(2).map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link

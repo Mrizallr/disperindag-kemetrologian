@@ -61,7 +61,14 @@ const AdminDashboard: React.FC = () => {
   const [pelakuUsahaBaru, setPelakuUsahaBaru] = useState(0);
   const [recentData, setRecentData] = useState<RecentDataItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [chartData, setChartData] = useState({
+  const [chartData, setChartData] = useState<{
+    statusTera: { name: string; value: number }[];
+    jenisLapak: { name: string; jumlah: number }[];
+    trendBulanan: { bulan: string; pelakuUsaha: number; teraUlang: number }[];
+    aktivitasMingguan: { hari: string; tera: number; pengawasan: number }[];
+    dataTeraStats: { spbu: number; pasar: number; umum: number };
+    permohonanStats: { pending: number; processing: number; approved: number; rejected: number };
+  }>({
     statusTera: [{ name: "Aktif", value: 0 }, { name: "Perlu Tera Ulang", value: 0 }, { name: "Tidak Aktif", value: 0 }],
     jenisLapak: [{ name: "Kios", jumlah: 0 }, { name: "Los", jumlah: 0 }, { name: "PKL", jumlah: 0 }],
     trendBulanan: [],

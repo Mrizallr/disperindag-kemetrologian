@@ -931,45 +931,7 @@ const LandingPage: React.FC = () => {
             </Card>
           </div>
 
-          {/* Additional Info Section */}
-          <div className="mt-16 grid md:grid-cols-2 gap-8">
-            <Card className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8">
-              <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                <Globe className="w-6 h-6 text-blue-400" />
-                🌐 Kemetrologian Digital Garut
-              </h3>
-              <p className="text-white/90 leading-relaxed">
-                Platform layanan kemetrologian berbasis web untuk memudahkan
-                masyarakat mengakses informasi, mengajukan permohonan, serta
-                memantau proses tera/tera ulang secara transparan dan cepat.
-              </p>
-            </Card>
 
-            <Card className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8">
-              <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                <CheckCircle className="w-6 h-6 text-green-400" />
-                Layanan Kami
-              </h3>
-              <ul className="space-y-2 text-white/90">
-                <li className="flex items-center gap-2">
-                  <ArrowRight className="w-4 h-4 text-blue-400" />
-                  Layanan Tera & Tera Ulang
-                </li>
-                <li className="flex items-center gap-2">
-                  <ArrowRight className="w-4 h-4 text-blue-400" />
-                  Registrasi Pelaku Usaha
-                </li>
-                <li className="flex items-center gap-2">
-                  <ArrowRight className="w-4 h-4 text-blue-400" />
-                  Informasi Sertifikat
-                </li>
-                <li className="flex items-center gap-2">
-                  <ArrowRight className="w-4 h-4 text-blue-400" />
-                  Dashboard Monitoring
-                </li>
-              </ul>
-            </Card>
-          </div>
         </div>
       </section>
 
@@ -979,8 +941,12 @@ const LandingPage: React.FC = () => {
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div className="md:col-span-2">
               <div className="flex items-center space-x-4 group mb-6">
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300">
-                  <Scale className="w-7 h-7 text-white" />
+                <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-300 p-2">
+                  <img 
+                    src="/logo-disperindag.png" 
+                    alt="Logo Disperindag" 
+                    className="w-full h-full object-contain"
+                  />
                 </div>
                 <div>
                   <span className="font-bold text-2xl text-slate-200 group-hover:text-white transition-colors">
@@ -992,9 +958,7 @@ const LandingPage: React.FC = () => {
                 </div>
               </div>
               <p className="text-slate-300 leading-relaxed mb-6 max-w-md">
-                Platform digital terdepan untuk layanan kemetrologian dengan
-                teknologi AI, IoT, dan Blockchain. Melayani dengan inovasi,
-                integritas, dan kepercayaan.
+                Platform layanan kemetrologian berbasis web untuk memudahkan masyarakat mengakses informasi, mengajukan permohonan, serta memantau proses tera/tera ulang secara transparan dan cepat.
               </p>
               <div className="flex space-x-4">
                 <div className="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-colors cursor-pointer">

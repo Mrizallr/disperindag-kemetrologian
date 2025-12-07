@@ -59,6 +59,7 @@ const AdminDashboard: React.FC = () => {
   const [uttpTerdaftar, setUttpTerdaftar] = useState(0);
   const [teraUlangBulanIni, setTeraUlangBulanIni] = useState(0);
   const [pelakuUsahaBaru, setPelakuUsahaBaru] = useState(0);
+  const [totalAlatStandar, setTotalAlatStandar] = useState(0);
   const [recentData, setRecentData] = useState<RecentDataItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [chartData, setChartData] = useState<{
@@ -101,6 +102,7 @@ const AdminDashboard: React.FC = () => {
           teraUlangCountRes,
           pelakuBaruCountRes,
           recentPelakuRes,
+          alatStandarCountRes,
         ] = await Promise.all([
           // Total data tera SPBU
           supabase
@@ -144,6 +146,11 @@ const AdminDashboard: React.FC = () => {
             )
             .order("created_at", { ascending: false })
             .limit(5),
+
+          // Total alat standar
+          supabase
+            .from("daftar_alat")
+            .select("*", { count: "exact", head: true }),
         ]);
 
         // Set statistik - Total Pelaku Usaha dari gabungan 3 tabel tera
@@ -152,6 +159,8 @@ const AdminDashboard: React.FC = () => {
         setUttpTerdaftar(uttpCountRes.count ?? 0);
         setTeraUlangBulanIni(teraUlangCountRes.count ?? 0);
         setPelakuUsahaBaru(pelakuBaruCountRes.count ?? 0);
+        
+        setTotalAlatStandar(alatStandarCountRes.count ?? 0);
 
         // Format recent data
         if (recentPelakuRes.data) {
@@ -370,6 +379,7 @@ const AdminDashboard: React.FC = () => {
     uttpTerdaftar,
     teraUlangBulanIni,
     pelakuUsahaBaru,
+    totalAlatStandar,
   };
   // Render UI seperti aslinya, tapi dengan data realtime dari Supabase
   return (
@@ -484,7 +494,7 @@ const AdminDashboard: React.FC = () => {
           <Card className="border-0 shadow-lg bg-gradient-to-br from-violet-50 via-violet-50 to-violet-100 dark:from-slate-800 dark:via-slate-700 dark:to-slate-800 dark:border dark:border-slate-600/50 hover:shadow-xl transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                Tingkat Kepatuhan
+                Alat Standar Terdaftar
               </CardTitle>
               <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-violet-600 dark:from-violet-400 dark:to-violet-500 rounded-xl flex items-center justify-center shadow-lg">
                 <Activity className="w-5 h-5 text-white" />
@@ -492,17 +502,17 @@ const AdminDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-slate-900 dark:text-slate-100">
-                {Math.round((chartData.statusTera[0]?.value || 0) / Math.max(1, mockStats.totalPelakuUsaha) * 100)}%
+                {mockStats.totalAlatStandar.toLocaleString()}
               </div>
-              <div className="mt-2 space-y-2">
-                <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
-                  <div 
-                    className="bg-gradient-to-r from-violet-500 to-violet-600 h-2 rounded-full" 
-                    style={{ width: `${Math.round((chartData.statusTera[0]?.value || 0) / Math.max(1, mockStats.totalPelakuUsaha) * 100)}%` }}
-                  ></div>
-                </div>
+              <div className="mt-2 space-y-1">
                 <div className="text-xs text-slate-600 dark:text-slate-400">
-                  UTTP dengan status tera aktif
+                  Total alat standar kemetrologian
+                </div>
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="w-2 h-2 bg-violet-500 rounded-full"></div>
+                  <span className="text-xs text-slate-600 dark:text-slate-400">
+                    Terdaftar di sistem
+                  </span>
                 </div>
               </div>
             </CardContent>

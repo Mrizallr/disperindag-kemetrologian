@@ -48,7 +48,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
   const sidebarItems = [
     { icon: Home, label: "Dashboard", path: "/admin" },
-    { icon: Bell, label: "Notifikasi", path: "/admin/notifikasi" },
+    // { icon: Bell, label: "Notifikasi", path: "/admin/notifikasi" }, // Fitur dalam pengembangan
     // {
     //   icon: Users,
     //   label: "Data Wajib Teras",
@@ -128,7 +128,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           <nav className="flex-1 p-4 overflow-y-auto">
             <div className="space-y-2">
               {/* Menu items sebelum Data Tera */}
-              {sidebarItems.slice(0, 2).map((item) => {
+              {sidebarItems.slice(0, 1).map((item) => {
                 const Icon = item.icon;
                 return (
                   <Link

@@ -41,11 +41,11 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     // Cek reCAPTCHA - wajib dari awal
-    if (!isCaptchaValid) {
-      setError("Silakan selesaikan reCAPTCHA terlebih dahulu");
-      setIsLoading(false);
-      return;
-    }
+    // if (!isCaptchaValid) {
+    //   setError("Silakan selesaikan reCAPTCHA terlebih dahulu");
+    //   setIsLoading(false);
+    //   return;
+    // }
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -191,22 +191,22 @@ const LoginPage: React.FC = () => {
                 </div>
               </div>
 
-              <Captcha 
+              {/* <Captcha 
                 onVerify={setIsCaptchaValid} 
                 reset={resetCaptcha}
-              />
+              /> */
 
               <Button
                 type="submit"
-                disabled={isLoading || !isCaptchaValid}
+                disabled={isLoading}
                 className="w-full h-11 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold disabled:opacity-50"
               >
                 {isLoading ? "Sedang masuk..." : "Masuk"}
               </Button>
               
-              <p className="text-sm text-orange-600 text-center">
+              {/* <p className="text-sm text-orange-600 text-center">
                 Selesaikan reCAPTCHA untuk melanjutkan login
-              </p>
+              </p> */}
             </form>
             </CardContent>
         </Card>
